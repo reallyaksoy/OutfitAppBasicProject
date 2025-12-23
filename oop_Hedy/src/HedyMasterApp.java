@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 // ============================================================================
-// 1. ENUM KATMANI (VERİ STANDARTLARI)
+// 1. ENUM KATMANI (VERI STANDARTLARI)
 // ============================================================================
 
 enum Category { PANTOLON, GOMLEK, CEKET, ETEK, AYAKKABI, AKSESUAR, DIS_GIYIM }
@@ -12,7 +12,7 @@ enum Season { YAZ, KIS, ILKBAHAR, SONBAHAR, TUM_MEVSIMLER }
 enum WeatherType { GUNESLI, YAGMURLU, KARLI, RUZGARLI, BULUTLU }
 enum EventType { IS_TOPLANTISI, DATE_NIGHT, BALO, GUNLUK, SPOR, SEYAHAT }
 
-// Detaylı Nitelikler
+// Detayli Nitelikler
 enum FitStyle { MASKULEN, FEMINEN, UNISEX, OVERSIZE, SLIM }
 enum PatternType { BASIC, MOTIFLI, CIZGILI, KARELI }
 enum Vibe { IDDIALI, OTURAKLI, RAHAT, ASI, MINIMAL }
@@ -27,14 +27,14 @@ enum SeasonalPalette { KIS_KADINI, YAZ_KADINI, SONBAHAR_KADINI, ILKBAHAR_KADINI 
 class ClothingItem {
     private final String id;
     
-    // Zorunlu Ana Bileşenler
+    // Zorunlu Ana Bilesenler
     private String color;
     private String size;
     private String fabricRatio; 
     private Category category;
     private String brand;
 
-    // Opsiyonel / İşaretlenebilir Özellikler
+    // Opsiyonel / Isaretlenebilir Ozellikler
     private Material material;
     private PatternType pattern;
     private FitStyle fit;       
@@ -75,7 +75,7 @@ class ClothingItem {
         this.isBorrowed = false;
     }
 
-    // İşlemler
+    // Islemler
     public void wear() {
         this.lastWornDate = LocalDate.now();
         this.wearCount++;
@@ -116,7 +116,7 @@ class ClothingItem {
         private final String fabricRatio;
         private final String brand;
 
-        // Opsiyonel (Varsayılanlı)
+        // Opsiyonel (Varsayilanli)
         private Material material = Material.PAMUK;
         private PatternType pattern = PatternType.BASIC;
         private FitStyle fit = FitStyle.UNISEX;
@@ -146,11 +146,11 @@ class ClothingItem {
     }
 }
 
-// --- CANVAS & KOMBİN YAPILARI ---
+// --- CANVAS & KOMBIN YAPILARI ---
 class CanvasItem {
     private ClothingItem item;
-    private double x, y; // Tuval koordinatları
-    private int layer;   // Katman sırası
+    private double x, y; // Tuval koordinatlari
+    private int layer;   // Katman sirasi
     
     public CanvasItem(ClothingItem item, double x, double y, int layer) {
         this.item = item; this.x = x; this.y = y; this.layer = layer;
@@ -180,7 +180,7 @@ class Lookbook {
     private List<Outfit> outfits = new ArrayList<>();
     public Lookbook(String title) { this.title = title; }
     public void addOutfit(Outfit o) { outfits.add(o); }
-    public void show() { System.out.println("📂 Koleksiyon: " + title + " (" + outfits.size() + " Parça)"); }
+    public void show() { System.out.println("Koleksiyon: " + title + " (" + outfits.size() + " Parca)"); }
 }
 
 // --- PHYGITAL KUTU ---
@@ -200,14 +200,14 @@ class StorageBox {
 }
 
 // ============================================================================
-// 3. INTERFACE & STRATEGY PATTERN (ESNEKLİK VE MİMARİ)
+// 3. INTERFACE & STRATEGY PATTERN (ESNEKLIK VE MIMARI)
 // ============================================================================
 
 interface SuggestionStrategy {
     void suggest(List<ClothingItem> wardrobe);
 }
 
-// Strateji 1: Ruh Haline Göre Öneri
+// Strateji 1: Ruh Haline Gore Oneri
 class MoodStrategy implements SuggestionStrategy {
     private Vibe targetVibe;
     public MoodStrategy(Vibe vibe) { this.targetVibe = vibe; }
@@ -217,91 +217,98 @@ class MoodStrategy implements SuggestionStrategy {
         System.out.println("\n[Vibe Strategy] Modun: " + targetVibe);
         wardrobe.stream()
             .filter(i -> i.getVibe() == targetVibe && !i.isBorrowed())
-            .forEach(i -> System.out.println("   Öneri: " + i.getName()));
+            .forEach(i -> System.out.println("   -> Oneri: " + i.getName()));
     }
 }
 
-// Strateji 2: Hava Durumuna Göre Öneri (EKSİK OLAN KISIM EKLENDİ)
+// Strateji 2: Hava Durumuna Gore Oneri
 class WeatherStrategy implements SuggestionStrategy {
     private WeatherType weather;
     public WeatherStrategy(WeatherType w) { this.weather = w; }
 
     @Override
     public void suggest(List<ClothingItem> wardrobe) {
-        System.out.println("\n [Weather Strategy] Hava: " + weather);
+        System.out.println("\n[Weather Strategy] Hava: " + weather);
         wardrobe.stream()
             .filter(i -> {
                 if(weather == WeatherType.YAGMURLU && i.getMaterial() == Material.SUET) return false;
                 return true;
             })
             .limit(3)
-            .forEach(i -> System.out.println("    Güvenli Seçim: " + i.getName()));
+            .forEach(i -> System.out.println("   -> Guvenli Secim: " + i.getName()));
     }
 }
 
 // ============================================================================
-// 4. SERVICE KATMANI (İŞ MANTIĞI)
+// 4. SERVICE KATMANI (IS MANTIGI)
 // ============================================================================
 
-// 1. Görüntü İşleme & Toplu Tarama
+// 1. Goruntu Isleme & Toplu Tarama
 class VisionService {
     public List<ClothingItem> scanBatch(String imagePath) {
-        System.out.println("\n [AI Vision] Tarama: " + imagePath);
-        // Simülasyon
-        System.out.println("   Analiz: 2 parça tespit edildi.");
-        System.out.println("    [Soru]: Parlayan cisim bir 'Siyah Kazak' mı? (Güven: %65)");
-        System.out.println("   [Kullanıcı]: Evet.");
+        System.out.println("\n[AI Vision] Tarama: " + imagePath);
+        // Simulasyon
+        System.out.println("   -> Analiz: 2 parca tespit edildi.");
+        System.out.println("   -> [Soru]: Parlayan cisim bir 'Siyah Kazak' mi? (Guven: %65)");
+        System.out.println("   -> [Kullanici]: Evet.");
         
         List<ClothingItem> items = new ArrayList<>();
-        items.add(new ClothingItem.Builder(Category.DIS_GIYIM, "Siyah", "M", "%100 Yün", "Zara").build());
+        items.add(new ClothingItem.Builder(Category.DIS_GIYIM, "Siyah", "M", "%100 Yun", "Zara").build());
         items.add(new ClothingItem.Builder(Category.PANTOLON, "Mavi", "32", "Denim", "Levis").build());
         return items;
     }
 }
 
-// 2. Stilist & Bağlamsal Öneri (AI)
+// 2. Stilist & Baglamsal Oneri (AI)
 class StylistService {
     public void suggestOutfit(List<ClothingItem> wardrobe, WeatherType weather, EventType event) {
-        System.out.println("\n [AI Stylist] Analiz: " + weather + " + " + event);
+        System.out.println("\n[AI Stylist] Analiz: " + weather + " + " + event);
+        
         wardrobe.stream()
+            // Baglamsal Filtreleme
             .filter(i -> {
+                // Yagmurda Suet Olmaz
                 if(weather == WeatherType.YAGMURLU && i.getMaterial() == Material.SUET) return false;
+                // Resmi ortamda Yirtik/Asi olmaz
                 if(event == EventType.IS_TOPLANTISI && i.getVibe() == Vibe.ASI) return false;
                 return true;
             })
+            // Renk Uyumu (Simulasyon)
             .limit(2)
-            .forEach(i -> System.out.println("    Seçim: " + i.getName()));
+            .forEach(i -> System.out.println("   -> Secim: " + i.getName()));
     }
 }
 
-// 3. Bildirim & Sürdürülebilirlik (30 Gün Kuralı)
+// 3. Bildirim & Surdurulebilirlik (30 Gun Kurali)
 class NotificationService {
     public void checkHealth(List<ClothingItem> wardrobe, Season currentSeason) {
-        System.out.println("\n [Hatırlatıcı] Detoks Analizi (" + currentSeason + ")");
+        System.out.println("\n[Hatirlatici] Detoks Analizi (" + currentSeason + ")");
         LocalDate today = LocalDate.now();
+        
         wardrobe.stream()
-            .filter(i -> i.getSuitableSeasons().contains(currentSeason)) 
-            .filter(i -> ChronoUnit.DAYS.between(i.getLastWornDate(), today) > 30)
+            .filter(i -> i.getSuitableSeasons().contains(currentSeason)) // Mevsim Uygun
+            .filter(i -> ChronoUnit.DAYS.between(i.getLastWornDate(), today) > 30) // 30 Gundur Giyilmedi
             .forEach(i -> {
-                System.out.println("    Uyarı: '" + i.getName() + "' parçasını uzun süredir giymedin.");
-                System.out.println("      (Son Giyilme: " + i.getLastWornDate() + ")");
+                System.out.println("   [UYARI]: '" + i.getName() + "' parcasini uzun suredir giymedin.");
+                System.out.println("            (Son Giyilme: " + i.getLastWornDate() + ")");
             });
     }
 }
 
-// 4. Akıllı Alışveriş (Compatibility)
+// 4. Akilli Alisveris (Compatibility)
 class ShoppingAssistantService {
     public void checkCompatibility(ClothingItem targetItem, List<ClothingItem> wardrobe) {
-        System.out.println("\n[Alışveriş Asistanı] '" + targetItem.getName() + "' almalı mısın?");
+        System.out.println("\n[Alisveris Asistani] '" + targetItem.getName() + "' almali misin?");
         long compatibleCount = wardrobe.stream()
             .filter(i -> isColorMatch(i.getColor(), targetItem.getColor()))
             .count();
         
-        if(compatibleCount > 0) System.out.println("    Evet! Dolabında " + compatibleCount + " parça ile uyar.");
-        else System.out.println("   Hayır! Dolabındaki hiçbir şeyle uymuyor.");
+        if(compatibleCount > 0) System.out.println("   [+] Evet! Dolabinda " + compatibleCount + " parca ile uyar.");
+        else System.out.println("   [-] Hayir! Dolabindaki hicbir seyle uymuyor.");
     }
     
     private boolean isColorMatch(String c1, String c2) {
+        // Basit mantik: Siyah her seye uyar
         return c1.equals("Siyah") || c2.equals("Siyah") || !c1.equals(c2);
     }
 }
@@ -313,7 +320,7 @@ class OrganizationService {
         StorageBox box = new StorageBox(label);
         items.forEach(box::addItem);
         boxes.add(box);
-        System.out.println("\n[QR Kutu] Oluşturuldu: " + label + " | Kod: " + box.getQrCode());
+        System.out.println("\n[QR Kutu] Olusturuldu: " + label + " | Kod: " + box.getQrCode());
         return box;
     }
 }
@@ -322,17 +329,25 @@ class OrganizationService {
 class SocialService {
     public void lendItem(ClothingItem item, String friend) {
         item.markAsBorrowed(friend);
-        System.out.println("\n[Sosyal] '" + item.getName() + "' -> " + friend + " kişisine verildi.");
+        System.out.println("\n[Sosyal] '" + item.getName() + "' -> " + friend + " kisisine verildi.");
     }
 }
 
 class ColorAnalysisService {
     public void analyze(List<ClothingItem> wardrobe, SeasonalPalette palette) {
-        System.out.println("\n [Renk Analizi] Tipin: " + palette);
+        System.out.println("\n[Renk Analizi] Tipin: " + palette);
+        // Ornek: Kis kadinina Siyah yakisir
         if(palette == SeasonalPalette.KIS_KADINI) {
             wardrobe.stream().filter(i -> i.getColor().equals("Siyah"))
-                    .forEach(i -> System.out.println("    Yıldız Parça: " + i.getName()));
+                    .forEach(i -> System.out.println("   [*] Yildiz Parca: " + i.getName()));
         }
+    }
+}
+
+class TravelService {
+    public void packLuggage(String city, int days, WeatherType weather) {
+        System.out.println("\n[Bavul] " + city + " (" + days + " Gun) - Hava: " + weather);
+        System.out.println("   [+] Kapsul liste hazirlaniyor...");
     }
 }
 
@@ -343,17 +358,17 @@ class ColorAnalysisService {
 public class HedyMasterApp {
     public static void main(String[] args) {
         System.out.println("==========================================");
-        System.out.println("          HEDY      ");
+        System.out.println("          HEDY - ULTRA YASAM ASISTANI     ");
         System.out.println("==========================================\n");
 
-        // 1. HAZIRLIK: Manuel Veri Girişi
+        // 1. HAZIRLIK: Manuel Veri Girisi (Builder Pattern)
         List<ClothingItem> wardrobe = new ArrayList<>();
         
-        ClothingItem blazer = new ClothingItem.Builder(Category.CEKET, "Siyah", "M", "%100 Yün", "Massimo Dutti")
+        ClothingItem blazer = new ClothingItem.Builder(Category.CEKET, "Siyah", "M", "%100 Yun", "Massimo Dutti")
                 .setFit(FitStyle.MASKULEN).setVibe(Vibe.IDDIALI).setMaterial(Material.YUN)
                 .addSeason(Season.KIS).addSeason(Season.SONBAHAR)
                 .setPrice(5000)
-                .setLastWorn(LocalDate.now().minusDays(45)) 
+                .setLastWorn(LocalDate.now().minusDays(45)) // 45 gun once giyildi
                 .build();
 
         ClothingItem jeans = new ClothingItem.Builder(Category.PANTOLON, "Mavi", "32", "Denim", "Mavi Jeans")
@@ -362,7 +377,7 @@ public class HedyMasterApp {
                 .setLastWorn(LocalDate.now().minusDays(2))
                 .build();
         
-        ClothingItem suedeShoes = new ClothingItem.Builder(Category.AYAKKABI, "Kahve", "42", "Süet", "Divarese")
+        ClothingItem suedeShoes = new ClothingItem.Builder(Category.AYAKKABI, "Kahve", "42", "Suet", "Divarese")
                 .setMaterial(Material.SUET).setVibe(Vibe.OTURAKLI)
                 .addSeason(Season.SONBAHAR)
                 .build();
@@ -371,52 +386,59 @@ public class HedyMasterApp {
         wardrobe.add(jeans);
         wardrobe.add(suedeShoes);
 
-        // 2. TOPLU TARAMA
+        // 2. TOPLU TARAMA (AI Simulasyonu)
         VisionService vision = new VisionService();
         wardrobe.addAll(vision.scanBatch("raf_resmi.jpg"));
 
-        // 3. CANVAS & KOMBİN PLANLAMA
-        System.out.println("\n[Canvas] Kombin Yapılıyor...");
+        // 3. CANVAS & KOMBIN PLANLAMA (Ileri Tarihli)
+        System.out.println("\n[Canvas] Kombin Yapiliyor...");
         List<CanvasItem> canvasItems = new ArrayList<>();
-        canvasItems.add(new CanvasItem(blazer, 50, 100, 2)); 
-        canvasItems.add(new CanvasItem(jeans, 50, 300, 1)); 
+        canvasItems.add(new CanvasItem(blazer, 50, 100, 2)); // Ceket Ustte
+        canvasItems.add(new CanvasItem(jeans, 50, 300, 1));  // Jean Altta
         
-        Outfit meetingLook = new Outfit("Büyük Sunum", EventType.IS_TOPLANTISI, canvasItems);
-        meetingLook.setPlannedDate(LocalDate.now().plusDays(5));
+        Outfit meetingLook = new Outfit("Buyuk Sunum", EventType.IS_TOPLANTISI, canvasItems);
+        meetingLook.setPlannedDate(LocalDate.now().plusDays(5)); // 5 Gun sonraya planla
         
-        Lookbook winterFavs = new Lookbook("Kış Favorileri");
+        Lookbook winterFavs = new Lookbook("Kis Favorileri");
         winterFavs.addOutfit(meetingLook);
         winterFavs.show();
 
-        // 4. BAĞLAMSAL ÖNERİ (Service Kullanımı)
+        // 4. BAGLAMSAL ONERI (Hava & Etkinlik)
         StylistService stylist = new StylistService();
+        // Senaryo: Yagmurlu havada Is Toplantisi
         stylist.suggestOutfit(wardrobe, WeatherType.YAGMURLU, EventType.IS_TOPLANTISI);
+        // Beklenti: Suet Ayakkabi onerilmemeli!
 
-        // 5. STRATEJİ DESENİ KULLANIMI (Pattern Kullanımı)
-        // Burada Strategy Pattern'in gücünü gösteriyoruz:
+        // 5. STRATEJI DESENI KULLANIMI (Strategy Pattern)
+        // Ruh haline gore:
         SuggestionStrategy myStrategy = new MoodStrategy(Vibe.RAHAT);
         myStrategy.suggest(wardrobe);
         
-        // Strateji değiştiriyoruz (Polymorphism)
+        // Hava durumuna gore (Polymorphism):
         myStrategy = new WeatherStrategy(WeatherType.YAGMURLU);
         myStrategy.suggest(wardrobe);
 
-        // 6. BİLDİRİM SİSTEMİ
+        // 6. BILDIRIM SISTEMI (Mevsim & Sure)
         NotificationService notifier = new NotificationService();
         notifier.checkHealth(wardrobe, Season.KIS);
+        // Beklenti: Blazer (Kislik ve 45 gun giyilmedi) -> UYARI VERMELI.
 
-        // 7. PHYGITAL & SOSYAL & ANALİZ
+        // 7. PHYGITAL & SOSYAL & ANALIZ (Ekstralar)
         OrganizationService org = new OrganizationService();
-        org.createBox("Yazlıklar 2026", Arrays.asList(jeans));
+        org.createBox("Yazliklar 2026", Arrays.asList(jeans));
         
         SocialService social = new SocialService();
-        social.lendItem(jeans, "Ali"); 
+        social.lendItem(jeans, "Ali"); // Jean odunc verildi
         
         ColorAnalysisService color = new ColorAnalysisService();
-        color.analyze(wardrobe, SeasonalPalette.KIS_KADINI);
+        color.analyze(wardrobe, SeasonalPalette.KIS_KADINI); // Siyah blazer onerilir
 
         ShoppingAssistantService shop = new ShoppingAssistantService();
         ClothingItem badItem = new ClothingItem.Builder(Category.ETEK, "Neon Pembe", "S", "Poly", "Zara").build();
         shop.checkCompatibility(badItem, wardrobe);
+
+        // 8. BAVUL HAZIRLAMA 
+        TravelService travel = new TravelService();
+        travel.packLuggage("Paris", 3, WeatherType.KARLI);
     }
 }
